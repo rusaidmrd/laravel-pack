@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Post extends Model
 {
@@ -12,4 +13,25 @@ class Post extends Model
     protected $casts = [
         'body' => 'array'
     ];
+
+
+    public function getTitleUpperCaseAttribute()
+    {
+        return strtoupper($this->title);
+    }
+
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = strtolower($value);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class,'post_id');
+    }
+
+    public function users()
+    {
+        return $this->BelongsToMany(User::class,'post_user','post_id','user_id');
+    }
 }
