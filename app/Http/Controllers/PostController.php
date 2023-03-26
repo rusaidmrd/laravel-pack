@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\UpdatePostRequest;
-use App\Http\Resources\PostCollection;
-use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\PostCollection;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return PostCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::query()->get();
+        $pageSize = $request->page_size ?? 20;
+
+        $posts = Post::query()->paginate($pageSize);
         return new PostCollection($posts);
     }
 
