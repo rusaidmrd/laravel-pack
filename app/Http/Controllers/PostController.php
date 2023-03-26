@@ -35,7 +35,6 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request,PostRepository $repository)
     {
-
         $created = $repository->create($request->only([
             'title',
             'body',
