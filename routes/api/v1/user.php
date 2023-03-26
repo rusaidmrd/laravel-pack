@@ -3,7 +3,9 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])
+Route::middleware([
+    // 'auth'
+])
 ->name('users.')
 ->group(function(){
 

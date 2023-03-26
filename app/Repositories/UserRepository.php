@@ -3,9 +3,11 @@
 
 namespace App\Repositories;
 
+use App\Events\User\UserCreated;
 use App\Exceptions\GeneralJsonException;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository
 {
@@ -17,7 +19,9 @@ class UserRepository extends BaseRepository
             $created = User::query()->create([
                 'name' => data_get($attributes, 'name'),
                 'email' => data_get($attributes, 'email'),
+                'password' => Hash::make(data_get($attributes,'password'))
             ]);
+            event(new UserCreated($created));
             return $created;
         });
     }
