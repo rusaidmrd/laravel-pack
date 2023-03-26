@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Http\Resources\CommentCollection;
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use Illuminate\Http\JsonResponse;
 
@@ -12,21 +14,19 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return CommentCollection
      */
     public function index()
     {
         $comments = Comment::query()->get();
-        return new JsonResponse([
-            "data" => $comments
-        ]);
+        return new CommentCollection($comments);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreCommentRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return CommentResource
      */
     public function store(StoreCommentRequest $request)
     {
@@ -35,22 +35,18 @@ class CommentController extends Controller
             'body' => $request->body,
         ]);
 
-        return new JsonResponse([
-            'data' => $created
-        ]);
+        return new CommentResource($created);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\JsonResponse
+     * @return CommentResource
      */
     public function show(Comment $comment)
     {
-       return new JsonResponse([
-        "data" => $comment
-       ]);
+        return new CommentResource($comment);
     }
 
     /**
@@ -58,7 +54,7 @@ class CommentController extends Controller
      *
      * @param  \App\Http\Requests\UpdateCommentRequest  $request
      * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\JsonResponse
+     * @return CommentResource|JsonResponse
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
@@ -78,9 +74,7 @@ class CommentController extends Controller
             ],400);
         }
 
-        return new JsonResponse([
-            'data' => $comment
-        ]);
+        return new CommentResource($comment);
     }
 
     /**
