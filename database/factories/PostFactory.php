@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use Database\Factories\Helpers\FactoryHelper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -15,6 +17,7 @@ class PostFactory extends Factory
     {
         return [
             'title' => $this->faker->word,
+            'user_id' => FactoryHelper::getRandomModelId(User::class),
             'body' => []
         ];
     }
