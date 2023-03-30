@@ -17,10 +17,10 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->word,
+            'title' => $this->faker->sentence,
             'user_id' => FactoryHelper::getRandomModelId(User::class),
             'category_id' => FactoryHelper::getRandomModelId(Category::class),
-            'body' => []
+            'body' => '<p>' . implode('</p><p>', $this->faker->paragraphs(6)) . '</p>',
         ];
     }
 }

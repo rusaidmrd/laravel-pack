@@ -17,7 +17,7 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'body' => [],
+            'body' => $this->faker->sentence(),
             'user_id' => FactoryHelper::getRandomModelId(User::class),
             'post_id' => FactoryHelper::getRandomModelId(Post::class)
         ];
