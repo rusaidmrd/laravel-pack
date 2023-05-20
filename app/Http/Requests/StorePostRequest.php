@@ -27,11 +27,7 @@ class StorePostRequest extends FormRequest
         return [
             'title' => 'required|string',
             'body' => 'required|string',
-            'user_ids' =>[
-                'required',
-                'array',
-                new IntegerArray()
-            ]
+            'category_id' => 'required|integer|numeric',
         ];
     }
 
@@ -40,6 +36,7 @@ class StorePostRequest extends FormRequest
         return [
             'body.required' => "Please enter value for body.",
             'title.string' => "You have to provide string value for the title",
+            'category_id.required' => "Please choose the category"
         ];
     }
 }

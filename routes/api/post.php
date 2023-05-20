@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/posts', [PostController::class, 'index'])
     ->name('posts.index');
 
+Route::get('/posts/{post}', [PostController::class, 'show'])
+    ->name('posts.show')
+    ->whereNumber('post');
+
 
 // Protected Routes
 Route::middleware([
@@ -16,10 +20,7 @@ Route::middleware([
 ])
     ->name('posts.')
     ->group(function () {
-
-        Route::get('/posts/{post}', [PostController::class, 'show'])
-            ->name('show')
-            ->whereNumber('post');
+        Route::get('/my-posts', [PostController::class, 'myPost'])->name('by.user');
 
         Route::post('/posts', [PostController::class, 'store'])->name('store');
 

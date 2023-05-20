@@ -10,11 +10,7 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','body'];
-
-    protected $casts = [
-        'body' => 'array'
-    ];
+    protected $fillable = ['title', 'body', 'category_id', 'user_id'];
 
 
     public function getTitleUpperCaseAttribute()
@@ -29,11 +25,16 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class,'post_id');
+        return $this->hasMany(Comment::class, 'post_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

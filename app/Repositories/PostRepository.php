@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Exceptions\GeneralJsonException;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PostRepository extends BaseRepository
@@ -13,14 +14,13 @@ class PostRepository extends BaseRepository
     public function create(array $attributes)
     {
         return DB::transaction(function () use ($attributes) {
-
             $created = Post::query()->create([
                 'title' => data_get($attributes, 'title', 'Untitled'),
                 'body' => data_get($attributes, 'body'),
+                'category_id' => data_get($attributes, 'category_id'),
+                'user_id' => Auth::user()->id
             ]);
-            if($userIds = data_get($attributes, 'user_ids')){
-                $created->users()->sync($userIds);
-            }
+
             return $created;
         });
     }
@@ -32,24 +32,20 @@ class PostRepository extends BaseRepository
      */
     public function update($post, array $attributes)
     {
-        return DB::transaction(function () use($post, $attributes) {
+        return DB::transaction(function () use ($post, $attributes) {
             $updated = $post->update([
                 'title' => data_get($attributes, 'title', $post->title),
                 'body' => data_get($attributes, 'body', $post->body),
+                'category_id' => data_get($attributes, 'category_id', $post->category_id),
             ]);
 
             // if(!$updated){
             //     throw new GeneralJsonException('Failed to update post');
             // }
 
-            throw_if(!$updated,GeneralJsonException::class,'Failed to update post');
-
-            if($userIds = data_get($attributes, 'user_ids')){
-                $post->users()->sync($userIds);
-            }
+            throw_if(!$updated, GeneralJsonException::class, 'Failed to update post');
 
             return $post;
-
         });
     }
 
@@ -59,13 +55,10 @@ class PostRepository extends BaseRepository
      */
     public function forceDelete($post)
     {
-        return DB::transaction(function () use($post) {
+        return DB::transaction(function () use ($post) {
             $deleted = $post->forceDelete();
-            throw_if(!$deleted,GeneralJsonException::class,'cannot delete post.');
+            throw_if(!$deleted, GeneralJsonException::class, 'cannot delete post.');
             return $deleted;
         });
-
-
-
     }
 }
